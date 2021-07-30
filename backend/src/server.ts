@@ -1,6 +1,7 @@
 import express, {Request, Response} from 'express';
 import {attachUser} from './attach_user_middleware.js';
 import {resolve} from 'path';
+import {Api, apiError} from './api.js';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const defaultKfam = isProduction
@@ -53,6 +54,11 @@ async function main(){
         message: `I tick, therfore I am!`,
       })
     })
+
+    /**
+     * Api Routes
+    */
+  //  app.use('/api', new Api(k8sService, metricsService))
 
     app.listen(
       port,() => console.info(`Server listening on port http://localhost:${port} (in ${codeEnvironment} mode)`));
