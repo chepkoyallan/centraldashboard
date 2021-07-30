@@ -4,6 +4,7 @@
   "description": "Backend to query kubernetes clusture and other resources",
   "main": "server.js",
   "scripts": {
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
