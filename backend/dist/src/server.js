@@ -1,4 +1,5 @@
 import express from 'express';
+import { attachUser } from './attach_user_middleware.js';
 const isProduction = process.env.NODE_ENV === 'production';
 const defaultKfam = isProduction;
 const codeEnvironment = isProduction ? 'production' : 'development';
@@ -10,6 +11,7 @@ async function main() {
     const registrationFlowAllowed = (REGISTRATION_FLOW.toLowerCase() === "true");
     const app = express();
     app.use(express.json());
+    app.use(attachUser(USERID_HEADER, USERID_PREFIX));
     // app.use(express.static(frontEnd));
     // app.use()
     app.get('/debug', (req, res) => {
