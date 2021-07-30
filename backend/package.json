@@ -1,0 +1,25 @@
+{
+  "name": "cenral-dashboard-backend",
+  "version": "0.0.0",
+  "description": "Backend to query kubernetes clusture and other resources",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chepkoyallan/centraldashboard.git"
+  },
+  "keywords": [
+    "Central",
+    "Dashboard",
+    "kubernetes",
+    "dashboard"
+  ],
+  "author": "Allan Chepkoy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chepkoyallan/centraldashboard/issues"
+  },
+  "homepage": "https://github.com/chepkoyallan/centraldashboard#readme"
+}
