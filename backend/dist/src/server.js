@@ -14,6 +14,9 @@ async function main() {
     app.use(attachUser(USERID_HEADER, USERID_PREFIX));
     // app.use(express.static(frontEnd));
     // app.use()
+    /**
+     * Debug Route
+     */
     app.get('/debug', (req, res) => {
         res.json({
             user: req.user,
@@ -24,6 +27,15 @@ async function main() {
                 USERID_HEADER,
                 USERID_PREFIX,
             },
+        });
+    });
+    /**
+     * Healthz Route
+     */
+    app.get('/healthz', (req, res) => {
+        res.json({
+            codeEnvironment,
+            message: `I tick, therfore I am!`,
         });
     });
     app.listen(port, () => console.info(`Server listening on port http://localhost:${port} (in ${codeEnvironment} mode)`));
