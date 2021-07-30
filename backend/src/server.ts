@@ -1,5 +1,1 @@
-function hello(){
-    console.log("Hello From typescript")
-}
-
-hello()
+import {KubeConfig} from '@kubernetes/client-node';
