@@ -4,6 +4,8 @@ import {resolve} from 'path';
 import {Api, apiError} from './api.js';
 import {KubernetesService} from './k8s_service.js';
 import {KubeConfig} from '@kubernetes/client-node';
+import {WorkgroupApi} from './api_workgroup.js';
+import {DefaultApi} from './clients/profile_controller.js';
 // import {getMetricsService} from './metrics_service_factory.js';
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -32,6 +34,9 @@ async function main(){
 
     const k8sService = new KubernetesService(new KubeConfig());
     // const metricsService = await getMetricsService(k8sService);
+    console.info(`Using Profiles service at ${profilesServiceUrl}`);
+    const profilesService = new DefaultApi(profilesServiceUrl);
+
 
     app.use(express.json());
     app.use(attachUser(USERID_HEADER, USERID_PREFIX))
@@ -67,7 +72,15 @@ async function main(){
      * Api Routes
     */
    app.use('/api', new Api(k8sService).routes());
-
+   app.use('/api/workgroup', new WorkgroupApi(profilesService, k8sService, registrationFlowAllowed).routes());
+   app.use('/api', (req: Request, res: Response) => 
+    apiError({
+      res,
+      error: `Could not find the route you're looking for`,
+      code: 404,
+    })
+  );
+  
     app.listen(
       port,() => console.info(`Server listening on port http://localhost:${port} (in ${codeEnvironment} mode)`));
 }
