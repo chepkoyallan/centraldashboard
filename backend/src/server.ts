@@ -27,7 +27,7 @@ async function main(){
     const profilesServiceUrl =
       `http://${PROFILES_KFAM_SERVICE_HOST}:${PROFILES_KFAM_SERVICE_PORT}/kfam`;
 
-    // const frontEnd: string = resolve(__dirname, 'public');
+    const frontEnd: string = resolve("../backend/flow-ui/build");
     const registrationFlowAllowed = (REGISTRATION_FLOW.toLowerCase() === "true");
     const app: express.Application = express();
     
@@ -40,7 +40,7 @@ async function main(){
 
     app.use(express.json());
     app.use(attachUser(USERID_HEADER, USERID_PREFIX))
-    // app.use(express.static(frontEnd));
+    app.use(express.static(frontEnd));
     // app.use()
     /**
      * Debug Route
@@ -80,6 +80,10 @@ async function main(){
       code: 404,
     })
   );
+
+  app.get('/*', (_: express.Request, res: express.Response) => {
+    res.sendFile(resolve(frontEnd, 'index.html'));
+  });
   
     app.listen(
       port,() => console.info(`Server listening on port http://localhost:${port} (in ${codeEnvironment} mode)`));

@@ -1,5 +1,6 @@
 import express from 'express';
 import { attachUser } from './attach_user_middleware.js';
+import { resolve } from 'path';
 import { Api, apiError } from './api.js';
 import { KubernetesService } from './k8s_service.js';
 import { KubeConfig } from '@kubernetes/client-node';
@@ -13,7 +14,7 @@ const { PORT_1 = 8082, PROFILES_KFAM_SERVICE_HOST = defaultKfam, PROFILES_KFAM_S
 async function main() {
     const port = Number(PORT_1);
     const profilesServiceUrl = `http://${PROFILES_KFAM_SERVICE_HOST}:${PROFILES_KFAM_SERVICE_PORT}/kfam`;
-    // const frontEnd: string = resolve(__dirname, 'public');
+    const frontEnd = resolve("../backend/flow-ui/build");
     const registrationFlowAllowed = (REGISTRATION_FLOW.toLowerCase() === "true");
     const app = express();
     const k8sService = new KubernetesService(new KubeConfig());
@@ -22,7 +23,7 @@ async function main() {
     const profilesService = new DefaultApi(profilesServiceUrl);
     app.use(express.json());
     app.use(attachUser(USERID_HEADER, USERID_PREFIX));
-    // app.use(express.static(frontEnd));
+    app.use(express.static(frontEnd));
     // app.use()
     /**
      * Debug Route
@@ -58,6 +59,9 @@ async function main() {
         error: `Could not find the route you're looking for`,
         code: 404,
     }));
+    app.get('/*', (_, res) => {
+        res.sendFile(resolve(frontEnd, 'index.html'));
+    });
     app.listen(port, () => console.info(`Server listening on port http://localhost:${port} (in ${codeEnvironment} mode)`));
 }
 main();
